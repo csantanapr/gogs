@@ -287,7 +287,7 @@ objects:
       ROOT = /opt/gogs/data/repositories
 
       [server]
-      ROOT_URL=http://${HOSTNAME}
+      ROOT_URL=${PROTOCOL}://${HOSTNAME}
       SSH_DOMAIN=${HOSTNAME}
 
       [security]
@@ -306,6 +306,9 @@ parameters:
 - description: 'Custom hostname for http service route.  Leave blank for default hostname, e.g.: <application-name>-<project>.<default-domain-suffix>'
   name: HOSTNAME
   required: true
+- description: 'Select https or http to be use with Gogs application hostname  Leave blank for default http'
+  name: PROTOCOL
+  value: "http"
 - displayName: Database Username
   from: gogs
   value: gogs
