@@ -10,6 +10,7 @@ requirements. This repository contains:
 * Usage instructions
 ## Deployment
 There are two templates available: _persistent_ and _non-persistent_. The pesistent one requires two `PersistentVolume` available with default size required of 1Gi (the volume size can be specified with the template variables: `GOGS_VOLUME_CAPACITY` and `DB_VOLUME_CAPACITY`).
+
 If you want to configure Gogs to use `https` instead of `http` pass the variable `PROTOCOL` with value `https`, then update the route to do tls like edge
 ```yaml
 spec:
