@@ -9,6 +9,8 @@ objects:
 - apiVersion: v1
   kind: Secret
   metadata:
+    labels:
+      app: ${APPLICATION_NAME}
     annotations:
       template.openshift.io/expose-database_name: '{.data[''database-name'']}'
       template.openshift.io/expose-password: '{.data[''database-password'']}'
@@ -21,6 +23,8 @@ objects:
 - apiVersion: v1
   kind: Service
   metadata:
+    labels:
+      app: ${APPLICATION_NAME}
     annotations:
       template.openshift.io/expose-uri: >-
         postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
@@ -34,6 +38,7 @@ objects:
         targetPort: 5432
     selector:
       name: '${APPLICATION_NAME}-postgresql'
+      deploymentconfig: '${APPLICATION_NAME}-postgresql'
     sessionAffinity: None
     type: ClusterIP
   status:
@@ -41,6 +46,8 @@ objects:
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
+    labels:
+      app: ${APPLICATION_NAME}
     name: '${APPLICATION_NAME}-postgresql'
   spec:
     accessModes:
@@ -64,12 +71,14 @@ objects:
     replicas: 1
     selector:
       name: '${APPLICATION_NAME}-postgresql'
+      deploymentconfig: '${APPLICATION_NAME}-postgresql'
     strategy:
       type: Recreate
     template:
       metadata:
         labels:
           name: '${APPLICATION_NAME}-postgresql'
+          deploymentconfig: '${APPLICATION_NAME}-postgresql'
       spec:
         containers:
           - resources:
@@ -170,6 +179,9 @@ objects:
     host: ${HOSTNAME}
     to:
       name: ${APPLICATION_NAME}
+    tls:
+      termination: edge
+      insecureEdgeTerminationPolicy: Allow
 - kind: DeploymentConfig
   apiVersion: v1
   metadata:
@@ -333,6 +345,7 @@ parameters:
 - description: 'Select http or https to be use with Gogs application hostname  Leave blank for default http'
   name: PROTOCOL
   value: "http"
+  required: true
 - description: Volume space available for data, e.g. 512Mi, 2Gi
   name: GOGS_VOLUME_CAPACITY
   required: true
