@@ -59,14 +59,14 @@ objects:
     replicas: 1
     selector:
       name: '${APPLICATION_NAME}-postgresql'
-      deploymentconfig: ${APPLICATION_NAME}-postgresql
+      deploymentconfig: '${APPLICATION_NAME}-postgresql'
     strategy:
       type: Recreate
     template:
       metadata:
         labels:
           name: '${APPLICATION_NAME}-postgresql'
-          deploymentconfig: ${APPLICATION_NAME}-postgresql
+          deploymentconfig: '${APPLICATION_NAME}-postgresql'
       spec:
         containers:
           - resources:
